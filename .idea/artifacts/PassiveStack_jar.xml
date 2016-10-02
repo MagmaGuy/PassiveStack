@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="PassiveStack:jar">
+    <output-path>$PROJECT_DIR$/../artifacts/PassiveStack_jar</output-path>
+    <root id="archive" name="PassiveStack.jar">
+      <element id="module-output" name="PassiveStack" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/spigotmc/spigot-api/1.10.2-R0.1-SNAPSHOT/spigot-api-1.10.2-R0.1-20160919.082300-72.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

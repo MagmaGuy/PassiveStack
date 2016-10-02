@@ -1,0 +1,8 @@
+name: PassiveStack
+version: 1.1.0
+author: MagmaGuy
+main: com.magmaguy.passivestack.PassiveStack
+commands:
+  passivestack:
+    description: Tells a player how many super mobs are on the server.
+    usage: /PassiveStack
