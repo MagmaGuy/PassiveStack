@@ -17,13 +17,6 @@ package com.magmaguy.passivestack.animals;
 
 import com.magmaguy.passivestack.ItemDropVelocity;
 import com.magmaguy.passivestack.PassiveStack;
-import static com.magmaguy.passivestack.PassiveStack.superCowList;
-import java.util.List;
-import java.util.Random;
-import static org.bukkit.Bukkit.getLogger;
-import static org.bukkit.Material.LEATHER;
-import static org.bukkit.Material.MONSTER_EGG;
-import static org.bukkit.Material.RAW_BEEF;
 import org.bukkit.entity.Cow;
 import org.bukkit.entity.ExperienceOrb;
 import org.bukkit.event.EventHandler;
@@ -31,7 +24,15 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.Plugin;
+
+import java.util.List;
+import java.util.Random;
+
+import static com.magmaguy.passivestack.PassiveStack.superCowList;
+import static org.bukkit.Bukkit.getLogger;
+import static org.bukkit.Material.*;
 
 public class CowHandler implements Listener{
     
@@ -58,12 +59,7 @@ public class CowHandler implements Listener{
                 
                 getLogger().info("SuperCow spawned");
                 
-                if(!superCowList.contains(cow))
-                {
-                    
-                    superCowList.add(cow);
-                    
-                }
+                cow.setMetadata("SuperCow", new FixedMetadataValue(plugin, true));
                 
             }
             
@@ -83,7 +79,7 @@ public class CowHandler implements Listener{
     @EventHandler
     public void superDrops (EntityDamageByEntityEvent event){
         
-        if (superCowList.contains(event.getEntity()))
+        if (event.getEntity().hasMetadata("SuperCow"))
         {
             
             Random random = new Random();
@@ -148,14 +144,11 @@ public class CowHandler implements Listener{
             
             Cow cow = (Cow) event.getEntity();
             
-            if (superCowList.contains(cow))
+            if (cow.hasMetadata("SuperCow"))
             {
                 
                 ItemStack cowMonsterEgg = new ItemStack(MONSTER_EGG, 2, (short) 92);
                 cow.getWorld().dropItem(cow.getLocation(), cowMonsterEgg);
-                
-                int index = superCowList.indexOf(cow);
-                superCowList.remove(index);
                 
             }
             

@@ -15,31 +15,8 @@
 
 package com.magmaguy.passivestack.animals;
 
-import static com.magmaguy.passivestack.AnimalChecker.mobStackAmount;
 import com.magmaguy.passivestack.ItemDropVelocity;
 import com.magmaguy.passivestack.PassiveStack;
-import static com.magmaguy.passivestack.PassiveStack.superSheepList;
-import static org.bukkit.DyeColor.LIGHT_BLUE;
-import static org.bukkit.DyeColor.MAGENTA;
-import static org.bukkit.DyeColor.ORANGE;
-import static org.bukkit.DyeColor.WHITE;
-import static org.bukkit.DyeColor.YELLOW;
-import static org.bukkit.DyeColor.LIME;
-import static org.bukkit.DyeColor.PINK;
-import static org.bukkit.DyeColor.GRAY;
-import static org.bukkit.DyeColor.SILVER;
-import static org.bukkit.DyeColor.CYAN;
-import static org.bukkit.DyeColor.PURPLE;
-import static org.bukkit.DyeColor.BLUE;
-import static org.bukkit.DyeColor.BROWN;
-import static org.bukkit.DyeColor.GREEN;
-import static org.bukkit.DyeColor.RED;
-import java.util.List;
-import java.util.Random;
-import static org.bukkit.Bukkit.getLogger;
-import static org.bukkit.Material.MONSTER_EGG;
-import static org.bukkit.Material.MUTTON;
-import static org.bukkit.Material.WOOL;
 import org.bukkit.entity.Sheep;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -47,7 +24,16 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.PlayerShearEntityEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.Plugin;
+
+import java.util.List;
+import java.util.Random;
+
+import static com.magmaguy.passivestack.AnimalChecker.mobStackAmount;
+import static com.magmaguy.passivestack.PassiveStack.superSheepList;
+import static org.bukkit.Bukkit.getLogger;
+import static org.bukkit.Material.*;
 
 public class SheepHandler implements Listener{
     
@@ -73,12 +59,7 @@ public class SheepHandler implements Listener{
                 sheep.setHealth(sheep.getMaxHealth());
                 getLogger().info("SuperSheep spawned.");
                 
-                if (!superSheepList.contains(sheep))
-                {
-                    
-                    superSheepList.add(sheep);
-                    
-                }
+                sheep.setMetadata("SuperSheep", new FixedMetadataValue(plugin, true));
                 
                 
             }
@@ -99,7 +80,7 @@ public class SheepHandler implements Listener{
     public void superDrops (EntityDamageByEntityEvent event)
     {
         
-        if (superSheepList.contains(event.getEntity()))
+        if (event.getEntity().hasMetadata("SuperSheep"))
         {
             
             Random random = new Random();
@@ -200,14 +181,11 @@ public class SheepHandler implements Listener{
             
             Sheep sheep = (Sheep) event.getEntity();
             
-            if(superSheepList.contains(sheep))
+            if(sheep.hasMetadata("SuperSheep"))
             {
                 
                 ItemStack sheepMonsterEgg = new ItemStack (MONSTER_EGG, 2, (short) 91);
                 sheep.getWorld().dropItem(sheep.getLocation(), sheepMonsterEgg);
-                
-                int index = superSheepList.indexOf(sheep);
-                superSheepList.remove(index);
                 
             }
             
@@ -218,7 +196,7 @@ public class SheepHandler implements Listener{
     @EventHandler
     public void onShear(PlayerShearEntityEvent event){
         
-        if (superSheepList.contains(event.getEntity()))
+        if (event.getEntity().hasMetadata("SuperSheep"))
         {
             
             Sheep sheep = (Sheep) event.getEntity();

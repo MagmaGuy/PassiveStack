@@ -14,8 +14,9 @@
  */
 package com.magmaguy.passivestack;
 
-import java.util.Random;
 import org.bukkit.util.Vector;
+
+import java.util.Random;
 
 /**
  *

@@ -15,10 +15,13 @@
 
 package com.magmaguy.passivestack;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
+
+import java.util.List;
 
 import static com.magmaguy.passivestack.PassiveStack.*;
 
@@ -37,13 +40,73 @@ public class CommandHandler implements CommandExecutor{
 
             if (label.equals("passivestack"))
             {
-                player.sendRawMessage("Total amount of Super Mobs: " + superMobList.size());
+
+                for (Object world : PassiveStack.worldList)
+                {
+
+                    List entityList = Bukkit.getWorld(world.toString()).getEntities();
+
+                    for (Object object : entityList)
+                    {
+
+                        if (object instanceof Entity)
+                        {
+
+                            Entity entity = (Entity) object;
+
+                            //Couldn't this be a switch statement?
+                            if (entity.hasMetadata("SuperChicken"))
+                            {
+
+                                superChickenList.add((Chicken) entity);
+
+                            } else if (entity.hasMetadata("SuperCow")) {
+
+                                superCowList.add((Cow) entity);
+
+                            } else if (entity.hasMetadata("SuperMushroomCow")) {
+
+                                superMushroomCowList.add((MushroomCow) entity);
+
+                            } else if (entity.hasMetadata("SuperPig")) {
+
+                                superPigList.add((Pig) entity);
+
+                            } else if (entity.hasMetadata("SuperSheep")) {
+
+                                superSheepList.add((Sheep) entity);
+
+                            } else if (entity.hasMetadata("SuperIronGolem")) {
+
+                                superIronGolemList.add((IronGolem) entity);
+
+                            }
+
+                            superMobCount = superChickenList.size() + superCowList.size() + superMushroomCowList.size()
+                                    + superPigList.size() + superSheepList.size() + superIronGolemList.size();
+
+                        }
+
+                    }
+
+                }
+
+                player.sendRawMessage("Total amount of Super Mobs: " + superMobCount);
                 player.sendRawMessage("Total amount of Super Chickens: " + superChickenList.size());
                 player.sendRawMessage("Total amount of Super Cows: " + superCowList.size());
                 player.sendRawMessage("Total amount of Super Mooshrooms: " + superMushroomCowList.size());
                 player.sendRawMessage("Total amount of Super Pigs: " + superPigList.size());
                 player.sendRawMessage("Total amount of Super Sheep: " + superSheepList.size());
                 player.sendRawMessage("Total amount of Super Iron Golems: " + superIronGolemList.size());
+
+                superMobCount = 0;
+                superChickenList.clear();
+                superCowList.clear();
+                superMushroomCowList.clear();
+                superPigList.clear();
+                superSheepList.clear();
+                superIronGolemList.clear();
+
                 return true;
 
             }

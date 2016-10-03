@@ -15,24 +15,24 @@
 
 package com.magmaguy.passivestack;
 
-import com.magmaguy.passivestack.animals.SheepHandler;
-import com.magmaguy.passivestack.animals.ChickenHandler;
-import com.magmaguy.passivestack.animals.CowHandler;
-import com.magmaguy.passivestack.animals.IronGolemHandler;
-import com.magmaguy.passivestack.animals.MushroomCowHandler;
-import com.magmaguy.passivestack.animals.PigHandler;
-import java.util.ArrayList;
-import java.util.List;
+/**
+ * Created by MagmaGuy on 02/10/2016.
+ */
+
+import com.magmaguy.passivestack.animals.*;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.*;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class PassiveStack extends JavaPlugin implements Listener{
     
     public static ArrayList<String> worldList = new ArrayList<>();
-    public static ArrayList<Entity> superMobList = new ArrayList<>();
+    public static int superMobCount = 0;
     public static List<Chicken> superChickenList = new ArrayList<>();
     public static List<Cow> superCowList = new ArrayList<>();
     public static List<MushroomCow> superMushroomCowList = new ArrayList();
@@ -74,10 +74,10 @@ public class PassiveStack extends JavaPlugin implements Listener{
         Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
             
             public void run(){
-                
+
+                //Might want to optimize egg system at some point
                 chickenHandler.superEggs();
                 chickenCheck.checkAnimals();
-                passiveMobDetector();
                 
             }
             
@@ -94,112 +94,4 @@ public class PassiveStack extends JavaPlugin implements Listener{
         
     }
 
-
-    public void passiveMobDetector(){
-
-        for (Chicken chicken : superChickenList)
-        {
-
-            if(!superMobList.contains(chicken))
-            {
-
-                superMobList.add(chicken);
-
-            }
-
-        }
-
-        for (Cow cow : superCowList)
-        {
-
-            if(!superMobList.contains(cow))
-            {
-
-                superMobList.add(cow);
-
-            }
-
-        }
-
-        for (MushroomCow mushroomCow : superMushroomCowList)
-        {
-
-            if(!superMobList.contains(mushroomCow))
-            {
-
-                superMobList.add(mushroomCow);
-
-            }
-
-        }
-
-        for (Pig pig : superPigList)
-        {
-            if(!superMobList.contains(pig))
-            {
-
-                superMobList.add(pig);
-
-            }
-
-        }
-
-        for (Sheep sheep : superSheepList)
-        {
-
-            if(!superMobList.contains(sheep))
-            {
-
-                superMobList.add(sheep);
-
-            }
-
-        }
-
-        for (IronGolem ironGolem : superIronGolemList)
-        {
-
-            if(!superMobList.contains(ironGolem))
-            {
-
-                superMobList.add(ironGolem);
-
-            }
-
-        }
-
-        for (Entity entity : superMobList)
-        {
-
-            if(entity instanceof Chicken && !superChickenList.contains(entity))
-            {
-
-                superMobList.remove(entity);
-
-            } else if (entity instanceof Cow && !superCowList.contains(entity)) {
-
-                superMobList.remove(entity);
-
-            } else if (entity instanceof MushroomCow && !superMushroomCowList.contains(entity)) {
-
-                superMobList.remove(entity);
-
-            } else if (entity instanceof Pig && !superPigList.contains(entity)) {
-
-                superMobList.remove(entity);
-
-            } else if (entity instanceof Sheep && !superSheepList.contains(entity)) {
-
-                superMobList.remove(entity);
-
-            } else if (entity instanceof IronGolem && !superIronGolemList.contains(entity)) {
-
-                superMobList.remove(entity);
-
-            }
-
-        }
-
-    }
-    
 }

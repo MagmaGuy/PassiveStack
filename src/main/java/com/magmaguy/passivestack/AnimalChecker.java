@@ -15,30 +15,17 @@
 
 package com.magmaguy.passivestack;
 
-import com.magmaguy.passivestack.animals.MushroomCowHandler;
-import com.magmaguy.passivestack.animals.SheepHandler;
-import com.magmaguy.passivestack.animals.ChickenHandler;
-import com.magmaguy.passivestack.animals.CowHandler;
-import com.magmaguy.passivestack.animals.PigHandler;
-import static com.magmaguy.passivestack.PassiveStack.superChickenList;
-import static com.magmaguy.passivestack.PassiveStack.superCowList;
-import static com.magmaguy.passivestack.PassiveStack.superIronGolemList;
-import static com.magmaguy.passivestack.PassiveStack.superMushroomCowList;
-import static com.magmaguy.passivestack.PassiveStack.superPigList;
-import static com.magmaguy.passivestack.PassiveStack.superSheepList;
-import com.magmaguy.passivestack.animals.IronGolemHandler;
+import com.magmaguy.passivestack.animals.*;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.*;
+import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.plugin.Plugin;
+
 import java.util.ArrayList;
 import java.util.List;
-import org.bukkit.Bukkit;
+
+import static com.magmaguy.passivestack.PassiveStack.*;
 import static org.bukkit.Bukkit.getLogger;
-import org.bukkit.entity.Chicken;
-import org.bukkit.entity.Cow;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.IronGolem;
-import org.bukkit.entity.MushroomCow;
-import org.bukkit.entity.Pig;
-import org.bukkit.entity.Sheep;
 
 public class AnimalChecker {
     
@@ -79,17 +66,17 @@ public class AnimalChecker {
                     Chicken chicken = (Chicken) object;
                     
                     //Check for existing SuperChicken using HP because it's just easier
-                    if (chicken.getMaxHealth() == chickenHealth * mobStackAmount && !superChickenList.contains(chicken) && chicken.getHealth() != 0)
+                    if (chicken.getMaxHealth() == chickenHealth * mobStackAmount && chicken.getHealth() != 0
+                            && !chicken.hasMetadata("SuperChicken"))
                     {
-                        
-                        superChickenList.add(chicken);
-                        
-                        getLogger().info("Added a superchicken to the list.");
-                        
+
+                        chicken.setMetadata("SuperChicken", new FixedMetadataValue(plugin, true));
+                        getLogger().info("Found a Super Chicken.");
+
                     }
                     
                     
-                    if (!superChickenList.contains(chicken))
+                    if (!chicken.hasMetadata("SuperChicken"))
                     {
                         
                         if (scanNearbyChicken(chicken))
@@ -110,16 +97,15 @@ public class AnimalChecker {
                     
                     Cow cow = (Cow) object;
                     
-                    if (cow.getMaxHealth() == cowHealth * mobStackAmount && !superCowList.contains(cow) && cow.getHealth() != 0) 
+                    if (cow.getMaxHealth() == cowHealth * mobStackAmount && cow.getHealth() != 0 && !cow.hasMetadata("SuperCow"))
                     {
-                        
-                        superCowList.add(cow);
-                        
-                        getLogger().info("Added a supercow to the list.");
+
+                        cow.setMetadata("SuperCow", new FixedMetadataValue(plugin, true));
+                        getLogger().info("Found a Super Cow.");
                         
                     }
                     
-                    if (!superCowList.contains(cow))
+                    if (!cow.hasMetadata("SuperCow"))
                     {
                         
                         if (scanNearbyCow(cow))
@@ -138,16 +124,17 @@ public class AnimalChecker {
                     
                     MushroomCow mushroomCow = (MushroomCow) object;
                     
-                    if (mushroomCow.getMaxHealth() == mushroomCowHealth * mobStackAmount && !superMushroomCowList.contains(mushroomCow) && mushroomCow.getHealth() != 0)
+                    if (mushroomCow.getMaxHealth() == mushroomCowHealth * mobStackAmount && mushroomCow.getHealth() != 0
+                            && !mushroomCow.hasMetadata("SuperMushroomCow"))
                     {
-                        
-                        superMushroomCowList.add(mushroomCow);
-                        
-                        getLogger().info("Added a mushroom cow to the list.");
+
+                        mushroomCow.setMetadata("SuperMushroomCow", new FixedMetadataValue(plugin, true));
+
+                        getLogger().info("Found a Super Mushroom Cow.");
                         
                     }
                     
-                    if (!superMushroomCowList.contains(mushroomCow))
+                    if (!mushroomCow.hasMetadata("SuperMushroomCow"))
                     {
                         
                         if (scanNearbyMushroomCow(mushroomCow))
@@ -166,16 +153,16 @@ public class AnimalChecker {
                     
                     Pig pig = (Pig) object;
                     
-                    if (pig.getMaxHealth() == pigHealth * mobStackAmount && !superPigList.contains(pig) && pig.getHealth() != 0)
+                    if (pig.getMaxHealth() == pigHealth * mobStackAmount && pig.getHealth() != 0 && !pig.hasMetadata("SuperPig"))
                     {
-                        
-                        superPigList.add(pig);
-                        
-                        getLogger().info("Added a pig to the list.");
+
+                        pig.setMetadata("SuperPig", new FixedMetadataValue(plugin, true));
+
+                        getLogger().info("Found a Super Pig.");
                         
                     }
                     
-                    if (!superPigList.contains(pig))
+                    if (!pig.hasMetadata("SuperPig"))
                     {
                         
                         if (scanNearbyPig(pig))
@@ -194,16 +181,16 @@ public class AnimalChecker {
                     
                     Sheep sheep = (Sheep) object;
                     
-                    if (sheep.getMaxHealth() == sheepHealth * mobStackAmount && !superSheepList.contains(sheep) && sheep.getHealth() != 0)
+                    if (sheep.getMaxHealth() == sheepHealth * mobStackAmount && sheep.getHealth() != 0 && !sheep.hasMetadata("SuperSheep"))
                     {
-                        
-                        superSheepList.add(sheep);
-                        
-                        getLogger().info("Added a Sheep to the list. Total: " + superSheepList.size() );
+
+                        sheep.setMetadata("SuperSheep", new FixedMetadataValue(plugin, true));
+
+                        getLogger().info("Found a Super Sheep");
                         
                     }
                     
-                    if (!superSheepList.contains(sheep))
+                    if (!sheep.hasMetadata("SuperSheep"))
                     {
                         
                         if (scanNearbySheep(sheep))
@@ -219,16 +206,17 @@ public class AnimalChecker {
                     
                     IronGolem ironGolem = (IronGolem) object;
                     
-                    if (ironGolem.getMaxHealth() == ironGolemHealth * mobStackAmount && !superIronGolemList.contains(ironGolem) && ironGolem.getHealth() != 0)
+                    if (ironGolem.getMaxHealth() == ironGolemHealth * mobStackAmount && ironGolem.getHealth() != 0
+                            && !ironGolem.hasMetadata("SuperIronGolem"))
                     {
-                        
-                        superIronGolemList.add(ironGolem);
-                        
-                        getLogger().info("Added an Iron Golem to the list.");
+
+                        ironGolem.setMetadata("SuperIronGolem", new FixedMetadataValue(plugin, true));
+
+                        getLogger().info("Found an Iron Golem.");
                         
                     }
                     
-                    if (!superIronGolemList.contains(ironGolem))
+                    if (!ironGolem.hasMetadata("SuperIronGolem"))
                     {
                         
                         if (scanNearbyIronGolem(ironGolem))
@@ -257,7 +245,7 @@ public class AnimalChecker {
         for (Entity entityNearChicken : chicken.getNearbyEntities(range, range, range))
         {
             
-            if (entityNearChicken instanceof Chicken && !superChickenList.contains(entityNearChicken))
+            if (entityNearChicken instanceof Chicken && !entityNearChicken.hasMetadata("SuperChicken"))
             {
                 
                 if (chickenList.size() < mobStackAmount)
@@ -270,8 +258,6 @@ public class AnimalChecker {
                 if (chickenList.size() >= mobStackAmount)
                 {
 
-                    getLogger().info("started");
-                    
                     ChickenHandler chickenHandler = new ChickenHandler(plugin);
                     chickenHandler.chickenConstructor(chickenList, mobStackAmount, plugin);
 
@@ -296,7 +282,7 @@ public class AnimalChecker {
         for (Entity entityNearCow : cow.getNearbyEntities(range, range, range))
         {
             
-            if (entityNearCow instanceof Cow && !superCowList.contains(entityNearCow))
+            if (entityNearCow instanceof Cow && !entityNearCow.hasMetadata("SuperCow"))
             {
                 
                 if (cowList.size() < mobStackAmount)
@@ -333,7 +319,7 @@ public class AnimalChecker {
         for (Entity entityNearMushroomCow : mushroomCow.getNearbyEntities(range, range, range))
         {
             
-            if (entityNearMushroomCow instanceof MushroomCow && !superMushroomCowList.contains(entityNearMushroomCow))
+            if (entityNearMushroomCow instanceof MushroomCow && !entityNearMushroomCow.hasMetadata("SuperMushroomCow"))
             {
                 
                 if (mushroomCowList.size() < mobStackAmount)
@@ -370,7 +356,7 @@ public class AnimalChecker {
         for (Entity entityNearPig : pig.getNearbyEntities(range, range, range))
         {
             
-            if (entityNearPig instanceof Pig && !superPigList.contains(entityNearPig))
+            if (entityNearPig instanceof  Pig && !entityNearPig.hasMetadata("SuperPig"))
             {
                
                if (pigList.size() < mobStackAmount)
@@ -407,7 +393,7 @@ public class AnimalChecker {
         for (Entity entityNearSheep : sheep.getNearbyEntities(range, range, range))
         {
             
-            if (entityNearSheep instanceof Sheep && !superSheepList.contains(entityNearSheep))
+            if (entityNearSheep instanceof Sheep && !entityNearSheep.hasMetadata("SuperSheep"))
             {
                 
                 Sheep entityNearSheepIsSheep = (Sheep) entityNearSheep;
@@ -417,13 +403,6 @@ public class AnimalChecker {
                     
                     if (sheepList.size() < mobStackAmount)
                     {
-                        
-                        if(superSheepList.contains(sheep))
-                        {
-                            
-                            getLogger().info("Wtf is this sheep doing here");
-                            
-                        }
                         
                         sheepList.add(entityNearSheep);
                         
@@ -458,7 +437,7 @@ public class AnimalChecker {
         for (Entity entityNearIronGolem : ironGolem.getNearbyEntities(range, range, range))
         {
             
-            if (entityNearIronGolem instanceof IronGolem && !superIronGolemList.contains(entityNearIronGolem))
+            if (entityNearIronGolem instanceof IronGolem && !entityNearIronGolem.hasMetadata("SuperIronGolem"))
             {
                 
                 if (ironGolemList.size() < mobStackAmount)

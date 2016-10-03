@@ -15,18 +15,8 @@
 
 package com.magmaguy.passivestack.animals;
 
-import static com.magmaguy.passivestack.AnimalChecker.mobStackAmount;
 import com.magmaguy.passivestack.ItemDropVelocity;
 import com.magmaguy.passivestack.PassiveStack;
-import static com.magmaguy.passivestack.PassiveStack.superMushroomCowList;
-import java.util.List;
-import java.util.Random;
-import static org.bukkit.Bukkit.getLogger;
-import static org.bukkit.Material.LEATHER;
-import static org.bukkit.Material.MONSTER_EGG;
-import static org.bukkit.Material.RAW_BEEF;
-import static org.bukkit.Material.RED_MUSHROOM;
-
 import org.bukkit.entity.ExperienceOrb;
 import org.bukkit.entity.MushroomCow;
 import org.bukkit.event.EventHandler;
@@ -35,7 +25,16 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.PlayerShearEntityEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.Plugin;
+
+import java.util.List;
+import java.util.Random;
+
+import static com.magmaguy.passivestack.AnimalChecker.mobStackAmount;
+import static com.magmaguy.passivestack.PassiveStack.superMushroomCowList;
+import static org.bukkit.Bukkit.getLogger;
+import static org.bukkit.Material.*;
 
 public class MushroomCowHandler implements Listener{
     
@@ -62,12 +61,7 @@ public class MushroomCowHandler implements Listener{
                 
                 getLogger().info("Super Mushroom Cow spawned");
                 
-                if (!superMushroomCowList.contains(mushroomCow))
-                {
-                    
-                    superMushroomCowList.add(mushroomCow);
-                    
-                }
+                mushroomCow.setMetadata("SuperMushroomCow", new FixedMetadataValue(plugin, true));
                 
             }
             
@@ -86,7 +80,7 @@ public class MushroomCowHandler implements Listener{
     @EventHandler
     public void superDrops (EntityDamageByEntityEvent event){
         
-        if (superMushroomCowList.contains(event.getEntity()))
+        if (event.getEntity().hasMetadata("SuperMushroomCow"))
         {
             
             Random random = new Random();
@@ -147,13 +141,12 @@ public class MushroomCowHandler implements Listener{
     @EventHandler
     public void onDeath(EntityDeathEvent event){
         
-        if (superMushroomCowList.contains(event.getEntity()))
+        if (event.getEntity().hasMetadata("SuperMushroomCow"))
         {
             
             ItemStack mushroomCowMonsterEgg = new ItemStack(MONSTER_EGG, 2, (short) 96);
             event.getEntity().getWorld().dropItem(event.getEntity().getLocation(), mushroomCowMonsterEgg);
-            
-            superMushroomCowList.remove(event.getEntity());
+
             
         }
         
@@ -163,7 +156,7 @@ public class MushroomCowHandler implements Listener{
     @EventHandler
     public void onShear (PlayerShearEntityEvent event){
         
-        if (superMushroomCowList.contains(event.getEntity()))
+        if (event.getEntity().hasMetadata("SuperMushroomCow"))
         {
             
             MushroomCow mushroomCow = (MushroomCow) event.getEntity();

@@ -17,13 +17,6 @@ package com.magmaguy.passivestack.animals;
 
 import com.magmaguy.passivestack.ItemDropVelocity;
 import com.magmaguy.passivestack.PassiveStack;
-import static com.magmaguy.passivestack.PassiveStack.superPigList;
-import java.util.List;
-import java.util.Random;
-import static org.bukkit.Bukkit.getLogger;
-import static org.bukkit.Material.MONSTER_EGG;
-import static org.bukkit.Material.PORK;
-
 import org.bukkit.entity.ExperienceOrb;
 import org.bukkit.entity.Pig;
 import org.bukkit.event.EventHandler;
@@ -31,7 +24,16 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.Plugin;
+
+import java.util.List;
+import java.util.Random;
+
+import static com.magmaguy.passivestack.PassiveStack.superPigList;
+import static org.bukkit.Bukkit.getLogger;
+import static org.bukkit.Material.MONSTER_EGG;
+import static org.bukkit.Material.PORK;
 
 public class PigHandler implements Listener{
     
@@ -58,12 +60,7 @@ public class PigHandler implements Listener{
                 
                 getLogger().info("SuperPig spawned.");
                 
-                if(!superPigList.contains(pig))
-                {
-                    
-                    superPigList.add(pig);
-                    
-                }
+                pig.setMetadata("SuperPig", new FixedMetadataValue(plugin, true));
                 
             }
             
@@ -82,7 +79,7 @@ public class PigHandler implements Listener{
     @EventHandler
     public void superDrops (EntityDamageByEntityEvent event){
         
-        if (superPigList.contains(event.getEntity()))
+        if (event.getEntity().hasMetadata("SuperPig"))
         {
             
             Random random = new Random();
@@ -130,14 +127,11 @@ public class PigHandler implements Listener{
             
             Pig pig = (Pig) event.getEntity();
             
-            if (superPigList.contains(pig))
+            if (pig.hasMetadata("SuperPig"))
             {
                 
                 ItemStack pigMonsterEgg = new ItemStack (MONSTER_EGG, 2, (short) 90);
                 pig.getWorld().dropItem(pig.getLocation(), pigMonsterEgg);
-                
-                int index = superPigList.indexOf(pig);
-                superPigList.remove(index);
                 
             }
             

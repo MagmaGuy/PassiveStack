@@ -16,13 +16,6 @@
 package com.magmaguy.passivestack.animals;
 
 import com.magmaguy.passivestack.PassiveStack;
-import static com.magmaguy.passivestack.PassiveStack.superIronGolemList;
-import java.util.List;
-import java.util.Random;
-import static org.bukkit.Bukkit.getLogger;
-import static org.bukkit.Material.IRON_INGOT;
-import static org.bukkit.Material.RED_ROSE;
-
 import org.bukkit.entity.ExperienceOrb;
 import org.bukkit.entity.IronGolem;
 import org.bukkit.event.EventHandler;
@@ -30,7 +23,16 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.Plugin;
+
+import java.util.List;
+import java.util.Random;
+
+import static com.magmaguy.passivestack.PassiveStack.superIronGolemList;
+import static org.bukkit.Bukkit.getLogger;
+import static org.bukkit.Material.IRON_INGOT;
+import static org.bukkit.Material.RED_ROSE;
 
 public class IronGolemHandler implements Listener{
     
@@ -57,12 +59,7 @@ public class IronGolemHandler implements Listener{
                 
                 getLogger().info("Super Iron Golem spawned.");
                 
-                if(!superIronGolemList.contains(ironGolem))
-                {
-                    
-                    superIronGolemList.add(ironGolem);
-                    
-                }
+                ironGolem.setMetadata("SuperIronGolem", new FixedMetadataValue(plugin, true));
                 
             }
             
@@ -81,7 +78,7 @@ public class IronGolemHandler implements Listener{
     @EventHandler
     public void superDrops (EntityDamageByEntityEvent event){
         
-        if (superIronGolemList.contains(event.getEntity()))
+        if (event.getEntity().hasMetadata("SuperIronGolem"))
         {
             
             Random random = new Random();
@@ -117,26 +114,6 @@ public class IronGolemHandler implements Listener{
 
                 ExperienceOrb xpDrop = ironGolem.getWorld().spawn(ironGolem.getLocation(), ExperienceOrb.class);
                 xpDrop.setExperience(random.nextInt(3) + 1);
-                
-            }
-            
-        }
-        
-    }
-    
-    @EventHandler
-    public void onDeath(EntityDeathEvent event){
-        
-        if (event.getEntity() instanceof IronGolem)
-        {
-            
-            IronGolem ironGolem = (IronGolem) event.getEntity();
-            
-            if(superIronGolemList.contains(ironGolem))
-            {
-                
-                int index = superIronGolemList.indexOf(ironGolem);
-                superIronGolemList.remove(index);
                 
             }
             

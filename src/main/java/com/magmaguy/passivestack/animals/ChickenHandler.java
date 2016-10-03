@@ -21,14 +21,7 @@ package com.magmaguy.passivestack.animals;
 
 import com.magmaguy.passivestack.ItemDropVelocity;
 import com.magmaguy.passivestack.PassiveStack;
-import static com.magmaguy.passivestack.PassiveStack.superChickenList;
-import java.util.List;
-import java.util.Random;
-import static org.bukkit.Bukkit.getLogger;
-import static org.bukkit.Material.EGG;
-import static org.bukkit.Material.FEATHER;
-import static org.bukkit.Material.MONSTER_EGG;
-import static org.bukkit.Material.RAW_CHICKEN;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Chicken;
 import org.bukkit.entity.ExperienceOrb;
 import org.bukkit.event.EventHandler;
@@ -36,7 +29,16 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.Plugin;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+import static com.magmaguy.passivestack.PassiveStack.superChickenList;
+import static org.bukkit.Bukkit.getLogger;
+import static org.bukkit.Material.*;
 
 //Reminder: This is getting called every second (20 ticks)
 public class ChickenHandler implements Listener{
@@ -64,12 +66,7 @@ public class ChickenHandler implements Listener{
                 
                 getLogger().info("SuperChicken spawned.");
                 
-                if(!superChickenList.contains(chicken))
-                {
-                    
-                    superChickenList.add(chicken);
-                    
-                }
+                chicken.setMetadata("SuperChicken", new FixedMetadataValue(plugin, true));
 
             }
 
@@ -90,7 +87,7 @@ public class ChickenHandler implements Listener{
     @EventHandler
     public void superDrops (EntityDamageByEntityEvent event){
 
-        if (superChickenList.contains(event.getEntity()))
+        if (event.getEntity().hasMetadata("SuperChicken"))
         {
             
             Random random = new Random();
@@ -137,19 +134,16 @@ public class ChickenHandler implements Listener{
     @EventHandler
     public void onDeath(EntityDeathEvent event){
         
-        if (event.getEntity() instanceof Chicken)
+        if (event.getEntity().hasMetadata("SuperChicken"))
         {
             
             Chicken chicken = (Chicken) event.getEntity();
             
-            if (superChickenList.contains(chicken))
+            if (chicken.hasMetadata("SuperChicken"))
             {
                 
                 ItemStack chickenMonsterEgg = new ItemStack(MONSTER_EGG, 2, (short) 93);
                 chicken.getWorld().dropItem(chicken.getLocation(), chickenMonsterEgg);
-                
-                int index = superChickenList.indexOf(chicken);
-                superChickenList.remove(index);
                 
             }
             
@@ -159,9 +153,34 @@ public class ChickenHandler implements Listener{
     
     
     public void superEggs (){
-        
-        
-        if (superChickenList.size() > 0)
+
+        List<Chicken> tempChickenList = new ArrayList<>();
+
+        for (Object world : PassiveStack.worldList)
+        {
+
+            List entityList = Bukkit.getWorld(world.toString()).getEntities();
+
+            for (Object object : entityList)
+            {
+
+                if(object instanceof Chicken)
+                {
+
+                    if(((Chicken) object).hasMetadata("SuperChicken"))
+                    {
+
+                        tempChickenList.add((Chicken) object);
+
+                    }
+
+                }
+
+            }
+
+        }
+
+        if (tempChickenList.size() > 0)
         {
             
             Random random = new Random();
@@ -171,17 +190,8 @@ public class ChickenHandler implements Listener{
             if(eggChance == 1)
             {
 
-                for (Chicken chicken : superChickenList)
+                for (Chicken chicken : tempChickenList)
                 {
-
-                    //Make sure the chicken is still alive
-                    if(chicken.getHealth() == 0)
-                    {
-                        
-                        superChickenList.remove(chicken);
-                        return;
-                        
-                    }
                     
                     ItemStack eggStack = new ItemStack(EGG, 1);
 
@@ -190,7 +200,7 @@ public class ChickenHandler implements Listener{
                 }
 
             }
-            
+
         }
         
         
